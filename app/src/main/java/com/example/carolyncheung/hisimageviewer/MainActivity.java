@@ -2,12 +2,16 @@ package com.example.carolyncheung.hisimageviewer;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.carolyncheung.hisimageviewer.utils.HISDecoder;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -17,6 +21,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
+    static {
+        System.loadLibrary("HISDecoder");
+    }
     private Button filePickTest_btn;
 
     private static final int READ_REQUEST_CODE = 42;
@@ -64,16 +71,11 @@ public class MainActivity extends AppCompatActivity {
             // a URI to that document will be contained in the return intent
             // provided to this as a parameter
             // pull URI using resultData.getData()
-            Uri uri = null;
             if (data != null) {
                 resultData = data.getData();
                 Log.i("SAFHelper", "URri: + " + resultData.toString());
-                try {
-//                    String s = readTextFromUri(resultData);
-                    imageBytes = getBytesFromUri(resultData);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                int a = HISDecoder.getWidth();
+                HISDecoder.HISOpen(resultData.toString());
             }
         }
     }
@@ -90,20 +92,5 @@ public class MainActivity extends AppCompatActivity {
         }
         byte[] inputData = byteBuffer.toByteArray();
         return inputData;
-    }
-
-    // not sure if want to use?
-    public String readTextFromUri(Uri uri) throws IOException {
-        InputStream inputStream = getContentResolver().openInputStream(uri);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(
-                inputStream
-        ));
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            stringBuilder.append(line);
-        }
-        inputStream.close();
-        return stringBuilder.toString();
     }
 }
