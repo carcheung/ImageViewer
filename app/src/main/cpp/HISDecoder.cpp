@@ -14,6 +14,8 @@
 #include <cstring>
 #include <string>
 
+#include <errno.h>
+
 using namespace std;
 
 typedef struct {
@@ -86,10 +88,11 @@ JNICALL
 Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
         JNIEnv *env, jobject, jstring path) {
     const char *strPath = NULL;
+    errno = 0;
     strPath = env->GetStringUTFChars(path,NULL);
     fp = fopen(strPath, "rb");
     if (fp == NULL) {
-        __android_log_print(ANDROID_LOG_INFO, "HISOpen", "Could not open image %s", strPath);
+        __android_log_print(ANDROID_LOG_INFO, "HISOpen", "Could not open image %s, errono: %d", strPath, errno);
         return -1;
     }
     // fill in the header

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.carolyncheung.hisimageviewer.utils.FilePath;
 import com.example.carolyncheung.hisimageviewer.utils.HISDecoder;
 
 import java.io.BufferedReader;
@@ -40,9 +41,17 @@ public class MainActivity extends AppCompatActivity {
         filePickTest_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                performFileSearch();
+                //performFileSearch();
+                fileSelect();
             }
         });
+    }
+
+    public void fileSelect() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        // all types for now
+        intent.setType("*/*");
+        startActivityForResult(Intent.createChooser(intent, "Select File"), READ_REQUEST_CODE);
     }
 
     // pls fire an intent to spin up the "file chooser" UI and select an image
@@ -72,10 +81,18 @@ public class MainActivity extends AppCompatActivity {
             // provided to this as a parameter
             // pull URI using resultData.getData()
             if (data != null) {
+                //resultData = data.getData();
+                //Log.i("SAFHelper", "URri: + " + resultData.toString());
+                //int a = HISDecoder.getWidth();
+                //HISDecoder.HISOpen(resultData.toString());
+
+                String selectedFilePath = "";
                 resultData = data.getData();
-                Log.i("SAFHelper", "URri: + " + resultData.toString());
-                int a = HISDecoder.getWidth();
-                HISDecoder.HISOpen(resultData.toString());
+                selectedFilePath = FilePath.getPath(getApplicationContext(), resultData);
+                Log.d("File path", selectedFilePath);
+                HISDecoder.HISOpen(selectedFilePath);
+                Log.d("Height", Integer.toString(HISDecoder.getHeight()));
+
             }
         }
     }
