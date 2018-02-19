@@ -119,5 +119,10 @@ public class MainActivity extends RuntimePermissionsActivity {
         Log.d("File path", selectedFilePath);
         HISDecoder.HISOpen(selectedFilePath);
         Log.d("Height", Integer.toString(HISDecoder.getHeight()));
+
+        // start new intent that passes filepath to image viewer
+        Intent intent = new Intent(this, ImageViewerActivity.class);
+        intent.putExtra(HISDecoder.FILEPATH_EXTRA, selectedFilePath);
+        startActivity(intent);
     }
 }
