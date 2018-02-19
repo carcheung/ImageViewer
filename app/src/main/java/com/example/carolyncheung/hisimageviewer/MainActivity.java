@@ -1,5 +1,6 @@
 package com.example.carolyncheung.hisimageviewer;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.carolyncheung.hisimageviewer.utils.FilePath;
 import com.example.carolyncheung.hisimageviewer.utils.HISDecoder;
@@ -21,15 +23,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends RuntimePermissionsActivity {
     static {
         System.loadLibrary("HISDecoder");
     }
-    private Button filePickTest_btn;
-
-    private static final int READ_REQUEST_CODE = 42;
     private Uri resultData;
     private byte[] imageBytes;
+    private String selectedFilePath;
+
+    private Button filePickTest_btn;
+
+    private static final int REQUEST_PERMISSIONS = 20;
+    private static final int READ_REQUEST_CODE = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,17 +86,13 @@ public class MainActivity extends AppCompatActivity {
             // provided to this as a parameter
             // pull URI using resultData.getData()
             if (data != null) {
-                //resultData = data.getData();
-                //Log.i("SAFHelper", "URri: + " + resultData.toString());
-                //int a = HISDecoder.getWidth();
-                //HISDecoder.HISOpen(resultData.toString());
-
-                String selectedFilePath = "";
                 resultData = data.getData();
                 selectedFilePath = FilePath.getPath(getApplicationContext(), resultData);
-                Log.d("File path", selectedFilePath);
-                HISDecoder.HISOpen(selectedFilePath);
-                Log.d("Height", Integer.toString(HISDecoder.getHeight()));
+                // request permissions
+                MainActivity.super.requestAppPermissions(
+                        new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
+                        R.string.runtime_permissions_txt,
+                        REQUEST_PERMISSIONS);
 
             }
         }
@@ -109,5 +110,14 @@ public class MainActivity extends AppCompatActivity {
         }
         byte[] inputData = byteBuffer.toByteArray();
         return inputData;
+    }
+
+    // permission granted, open file
+    @Override
+    public void onPermissionsGranted(final int requestCode) {
+        Toast.makeText(this, "Permissions Received!", Toast.LENGTH_SHORT).show();
+        Log.d("File path", selectedFilePath);
+        HISDecoder.HISOpen(selectedFilePath);
+        Log.d("Height", Integer.toString(HISDecoder.getHeight()));
     }
 }

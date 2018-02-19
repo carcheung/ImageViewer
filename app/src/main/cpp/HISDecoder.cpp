@@ -58,13 +58,17 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getHeight(JNIEnv 
     return height;
 }
 
-jint
+extern "C"
+JNIEXPORT jint
+JNICALL
 Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getNumberOfFrames(JNIEnv *env) {
     return frames;
 }
 
 // translate bytes array to jintArray
-jintArray
+extern "C"
+JNIEXPORT jintArray
+JNICALL
 Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getBytes(JNIEnv *env) {
 //uint16_t *
     int length = width * height * frames;
@@ -89,6 +93,13 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
         JNIEnv *env, jobject, jstring path) {
     const char *strPath = NULL;
     errno = 0;
+    if (data) {
+        free(data);
+    }
+    if (fp) {
+        fclose(fp);
+    }
+
     strPath = env->GetStringUTFChars(path,NULL);
     fp = fopen(strPath, "rb");
     if (fp == NULL) {
@@ -135,10 +146,11 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
         fread(&pixel, bytesPerPixel, 1, fp);
 
         data[index] = pixel;
-        if (index < 20) {
-            cout << index << ": " << pixel << endl;
-            __android_log_print(ANDROID_LOG_DEBUG, "HISOpen", "%d: %d", index, pixel);
-        }
+// TODO:  remove debug completely
+//        if (index < 20) {
+//            cout << index << ": " << pixel << endl;
+//            __android_log_print(ANDROID_LOG_DEBUG, "HISOpen", "%d: %d", index, pixel);
+//        }
         index++;
     }
     return 0;

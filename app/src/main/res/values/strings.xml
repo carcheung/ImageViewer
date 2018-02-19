@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HIS Image Viewer</string>
+    <string name="runtime_permissions_txt">Permission pls</string>
 </resources>
