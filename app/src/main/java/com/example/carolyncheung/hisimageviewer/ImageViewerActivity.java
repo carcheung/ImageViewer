@@ -37,6 +37,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         setContentView(mLinearLayout);
         HISDecoder.HISClose();
 
+
         for (int i = 0; i < 10; i++) {
             Log.d(Integer.toString(i), Integer.toString(pixels[i]));
         }

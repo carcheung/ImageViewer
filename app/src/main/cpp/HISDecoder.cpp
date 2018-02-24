@@ -80,9 +80,7 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getBytes(JNIEnv *
         jint * bytes = env->GetIntArrayElements(bytesArr, NULL);
         if (bytes != NULL) {
             memcpy(bytes, data, length * sizeof(uint16_t));
-            for (int i = 0; i < 10; i++) {
-                __android_log_print(ANDROID_LOG_INFO, "getBytes", "%d: %d", i, data[i]);
-            }
+            __android_log_print(ANDROID_LOG_INFO, "bytes[0]", "%d", bytes[0]);
             env->ReleaseIntArrayElements(bytesArr, bytes, 0);
         }
     }
@@ -155,9 +153,10 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
 
         data[index] = pixel;
 // TODO:  remove debug completely
-        if (index < 10) {
-            __android_log_print(ANDROID_LOG_DEBUG, "HISOpen", "%d: %d", index, pixel);
-        }
+//        if (index < 20) {
+//            cout << index << ": " << pixel << endl;
+//            __android_log_print(ANDROID_LOG_DEBUG, "HISOpen", "%d: %d", index, pixel);
+//        }
         index++;
     }
     return 0;
