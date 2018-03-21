@@ -22,5 +22,4 @@ public class HISDecoder {
     public static native void HISClose();
 
     public static String FILEPATH_EXTRA = "filepath";
-
 }

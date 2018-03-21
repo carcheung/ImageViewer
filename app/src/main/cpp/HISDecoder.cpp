@@ -40,9 +40,9 @@ unsigned short width = 0;
 unsigned short height = 0;
 unsigned short frames = 0;
 unsigned short typeOfNumber = 0;
-int bytesPerPixel = 0;
+size_t bytesPerPixel = 0;
 
-uint16_t * data;
+int * data = NULL;
 
 extern "C"
 JNIEXPORT jint
@@ -79,7 +79,7 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getBytes(JNIEnv *
         // put data into bytesArr
         jint * bytes = env->GetIntArrayElements(bytesArr, NULL);
         if (bytes != NULL) {
-            memcpy(bytes, data, length * sizeof(uint16_t));
+            memcpy(bytes, data, length * sizeof(int));
             __android_log_print(ANDROID_LOG_INFO, "bytes[0]", "%d", bytes[0]);
             env->ReleaseIntArrayElements(bytesArr, bytes, 0);
         }
@@ -100,10 +100,16 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
     const char *strPath = NULL;
     errno = 0;
     if (data) {
+        __android_log_print(ANDROID_LOG_INFO, "HISOpen", "free data");
         free(data);
     }
     if (fp) {
+        __android_log_print(ANDROID_LOG_INFO, "HISOpen", "fp close");
         fclose(fp);
+    }
+    if (h) {
+        __android_log_print(ANDROID_LOG_INFO, "HISOpen", "free h");
+        free(h);
     }
 
     strPath = env->GetStringUTFChars(path,NULL);
@@ -116,7 +122,7 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
     h = (HISHEADER *)malloc(sizeof(HISHEADER));
     fread(h, sizeof(HISHEADER), 1, fp);
 
-    uint16_t pixel;
+    int pixel;
 
     // get bytes per pixel
     if (h->TypeOfNumbers == 2) {
@@ -143,22 +149,17 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISOpen(
     height = h->BRY;
     frames = h->NumberOfFrames;
 
-    data = (uint16_t*) malloc(frames * width * height * bytesPerPixel);
+    data = (int*) malloc(frames * width * height * bytesPerPixel + (bytesPerPixel));
     int index = 0;
     // skip the header (100 bytes)
-    fseek(fp, (100) + (0), SEEK_SET);
+    fseek(fp, sizeof(HISHEADER), SEEK_SET);
 
     while (!feof(fp)) {
         fread(&pixel, bytesPerPixel, 1, fp);
-
-        data[index] = pixel;
-// TODO:  remove debug completely
-//        if (index < 20) {
-//            cout << index << ": " << pixel << endl;
-//            __android_log_print(ANDROID_LOG_DEBUG, "HISOpen", "%d: %d", index, pixel);
-//        }
+        data[index] =  pixel;
         index++;
     }
+
     return 0;
 }
 
@@ -168,8 +169,14 @@ JNICALL
 Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_HISClose(JNIEnv *env, jobject) {
     if (data) {
         free(data);
+        data = NULL;
     }
     if (fp) {
         fclose(fp);
+        fp = NULL;
+    }
+    if (h) {
+        free(h);
+        h = NULL;
     }
 }

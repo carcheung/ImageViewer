@@ -117,8 +117,6 @@ public class MainActivity extends RuntimePermissionsActivity {
     public void onPermissionsGranted(final int requestCode) {
         Toast.makeText(this, "Permissions Received!", Toast.LENGTH_SHORT).show();
         Log.d("File path", selectedFilePath);
-        HISDecoder.HISOpen(selectedFilePath);
-        Log.d("Height", Integer.toString(HISDecoder.getHeight()));
 
         // start new intent that passes filepath to image viewer
         Intent intent = new Intent(this, ImageViewerActivity.class);
