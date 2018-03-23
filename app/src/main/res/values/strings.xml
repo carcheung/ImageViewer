@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">HIS Image Viewer</string>
     <string name="runtime_permissions_txt">Permission pls</string>
+    <string name="text_brightness">Brightness</string>
+    <string name="text_contrast">Contrast</string>
 </resources>

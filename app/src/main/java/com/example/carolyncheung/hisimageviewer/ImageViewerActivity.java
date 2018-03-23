@@ -3,6 +3,8 @@ package com.example.carolyncheung.hisimageviewer;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -30,7 +32,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         int[] pixels = HISDecoder.getBytes();
 
         for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = pixels[i] * 500000;
+            pixels[i] = pixels[i] * 450000;
         }
 
         mBitmap = Bitmap.createBitmap(pixels, HISDecoder.getWidth(), HISDecoder.getHeight(),
@@ -40,6 +42,12 @@ public class ImageViewerActivity extends AppCompatActivity {
         mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
         mImageView.setAdjustViewBounds(true);
         mImageView.setBackgroundColor(Color.parseColor("#000000"));
+
+        ColorMatrix matrix = new ColorMatrix();
+        matrix.setSaturation(0);
+
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(matrix);
+        mImageView.setColorFilter(filter);
 
         HISDecoder.HISClose();
     }

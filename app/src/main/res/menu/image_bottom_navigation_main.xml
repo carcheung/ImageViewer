@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_brightness"
+        android:enabled="true"
+        android:icon="@drawable/ic_brightness_medium_white_24dp"
+        android:title="@string/text_brightness"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_contrast"
+        android:enabled="true"
+        android:icon="@drawable/ic_invert_colors_white_24dp"
+        android:title="@string/text_contrast"
+        app:showAsAction="ifRoom"/>
+
+</menu>
