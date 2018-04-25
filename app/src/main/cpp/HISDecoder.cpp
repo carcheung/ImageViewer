@@ -85,11 +85,6 @@ Java_com_example_carolyncheung_hisimageviewer_utils_HISDecoder_getBytes(JNIEnv *
         }
     }
 
-    int * a = env->GetIntArrayElements(bytesArr, false);
-    for (int i = 0; i < 10; i++) {
-        __android_log_print(ANDROID_LOG_INFO, "getBytes", "%d: %d", i, a[i]);
-    }
-
     return bytesArr;
 }
 extern "C"

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/HISImageViewer.iml" filepath="$PROJECT_DIR$/HISImageViewer.iml" />
+      <module fileurl="file://F:\AndroidStudioProjects\ImageViewer\HISImageViewer.iml" filepath="F:\AndroidStudioProjects\ImageViewer\HISImageViewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/ImageViewer.iml" filepath="$PROJECT_DIR$/ImageViewer.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

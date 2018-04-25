@@ -7,10 +7,12 @@ import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.carolyncheung.hisimageviewer.utils.HISDecoder;
+import com.example.carolyncheung.hisimageviewer.utils.ImageUtils;
 import com.example.carolyncheung.hisimageviewer.utils.TouchImageView;
 
 // TODO: Fragment ? to control contrast/brightness
@@ -30,10 +32,12 @@ public class ImageViewerActivity extends AppCompatActivity {
         HISDecoder.HISOpen(filePath);
         mImageView = findViewById(R.id.imageView);
         int[] pixels = HISDecoder.getBytes();
+        pixels = ImageUtils.LUTCalculation(pixels, 4854, 930);
 
-        for (int i = 0; i < pixels.length; i++) {
-            pixels[i] = pixels[i] * 450000;
-        }
+        // perform LUT calcuations here
+        // BRIGHT: any pixel above bright limit is now white
+        // DARK: any pixel below dark limit is now black
+        // Filler up in between some how
 
         mBitmap = Bitmap.createBitmap(pixels, HISDecoder.getWidth(), HISDecoder.getHeight(),
                 Bitmap.Config.ARGB_8888);
