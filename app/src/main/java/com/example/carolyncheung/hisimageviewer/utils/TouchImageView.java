@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -98,6 +99,8 @@ public class TouchImageView extends AppCompatImageView {
     private GestureDetector.OnDoubleTapListener doubleTapListener = null;
     private OnTouchListener userTouchListener = null;
     private OnTouchImageViewListener touchImageViewListener = null;
+
+    private boolean LOCK_IMAGE = false;
 
     public TouchImageView(Context context) {
         super(context);
@@ -824,6 +827,13 @@ public class TouchImageView extends AppCompatImageView {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
+            if (LOCK_IMAGE) {
+
+
+
+                return true;
+            }
+
             mScaleDetector.onTouchEvent(event);
             mGestureDetector.onTouchEvent(event);
             PointF curr = new PointF(event.getX(), event.getY());
@@ -850,6 +860,27 @@ public class TouchImageView extends AppCompatImageView {
                         break;
 
                     case MotionEvent.ACTION_UP:
+    /*                    float[] f = new float[9];
+                        getImageMatrix().getValues(f);
+
+
+                        int[] coords = new int[2];
+                        getLocationOnScreen(coords);
+                        int xCoord = (int) event.getX() - (int) f[matrix.MTRANS_X];
+                        xCoord = (int) (xCoord / f[matrix.MSCALE_X]);
+                        int yCoord = (int) event.getY() - (int) f[matrix.MTRANS_Y];
+                        yCoord = (int) (yCoord /  f[matrix.MSCALE_Y]);
+
+                        float w = getDrawable().getIntrinsicWidth();
+                        float h = getDrawable().getIntrinsicHeight();
+
+                        RectF rectangleView = getZoomedRect();
+
+                        Log.d("Top Left", Float.toString(rectangleView.left * w) + "," + Float.toString(rectangleView.top * h));
+                        Log.d("Bottom Right", Float.toString(rectangleView.right * w) + "," + Float.toString(rectangleView.bottom * h));
+
+                        Log.d("TOUCH", Integer.toString(xCoord) + "," + Integer.toString(yCoord)); */
+
                     case MotionEvent.ACTION_POINTER_UP:
                         setState(State.NONE);
                         break;
@@ -894,7 +925,6 @@ public class TouchImageView extends AppCompatImageView {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             scaleImage(detector.getScaleFactor(), detector.getFocusX(), detector.getFocusY(), true);
-
             //
             // OnTouchImageViewListener is set: TouchImageView pinch zoomed by user.
             //
@@ -1273,5 +1303,38 @@ public class TouchImageView extends AppCompatImageView {
         float[] n = new float[9];
         matrix.getValues(n);
         Log.d(DEBUG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
+    }
+
+    public void setLock() {
+        if (LOCK_IMAGE) {
+            LOCK_IMAGE = false;
+        } else {
+            LOCK_IMAGE = true;
+        }
+    }
+
+    // translate selected coordinates to actual coordinates of the image
+    public Rect translateSelectionCoordinates(RectF select) {
+        float[] f = new float[9];
+        getImageMatrix().getValues(f);
+        Rect mRect = new Rect();
+
+        mRect.left = (int) select.left - (int) f[matrix.MTRANS_X];
+        mRect.left = (int) (mRect.left / f[matrix.MSCALE_X]);
+        mRect.top = (int) select.top - (int) f[matrix.MTRANS_Y];
+        mRect.top = (int) (mRect.top / f[matrix.MSCALE_Y]);
+
+        mRect.right = (int) select.right - (int) f[matrix.MTRANS_X];
+        mRect.right = (int) (mRect.right / f[matrix.MSCALE_X]);
+        mRect.bottom = (int) select.bottom - (int) f[matrix.MTRANS_Y];
+        mRect.bottom = (int) (mRect.bottom / f[matrix.MSCALE_Y]);
+
+        Log.d("TOUCH", Integer.toString(mRect.left) + "," + Integer.toString(mRect.top));
+
+        return mRect;
+    }
+
+    public boolean getLock() {
+        return LOCK_IMAGE;
     }
 }

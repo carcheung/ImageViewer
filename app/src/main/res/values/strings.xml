@@ -3,4 +3,7 @@
     <string name="runtime_permissions_txt">Permission pls</string>
     <string name="text_brightness">Brightness</string>
     <string name="text_contrast">Contrast</string>
+    <string name="text_selector">Selector</string>
+    <string name="text_LUT">LUT</string>
+    <string name="text_adjust">Adjust</string>
 </resources>

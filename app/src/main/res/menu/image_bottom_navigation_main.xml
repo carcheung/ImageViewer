@@ -14,5 +14,18 @@
         android:icon="@drawable/ic_invert_colors_white_24dp"
         android:title="@string/text_contrast"
         app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_LUT_area_highlight"
+        android:enabled="true"
+        android:icon="@drawable/ic_tonality_white_24dp"
+        android:title="@string/text_selector"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_adjust_image"
+        android:enabled="true"
+        android:icon="@drawable/baseline_adjust_24"
+        android:title="@string/text_adjust"
+        app:showAsAction="ifRoom"/>
+
 
 </menu>

@@ -20,7 +20,7 @@
         android:id="@+id/open_file_picker_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WHERES MY MONEY BITCH"
+        android:text="Open"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="16dp"/>
 </android.support.constraint.ConstraintLayout>
