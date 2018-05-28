@@ -45,11 +45,6 @@ public class DrawRectangle extends View {
         strokeWidth = w;
     }
 
-    // set from coordinates
-    public void setRectCoords(RectF r) {
-        mRectF = r;
-    }
-
     // get coordinates
     public RectF getRectCoords() {
         return mRectF;

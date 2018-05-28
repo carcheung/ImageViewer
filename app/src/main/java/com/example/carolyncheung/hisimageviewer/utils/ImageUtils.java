@@ -49,26 +49,10 @@ public class ImageUtils {
         return bytes;
     }
 
-    // find min and max of ROI
-    public void FindROILUTMaxMin(int [] bytes) {
-        ROI_LUT_MAX = 0;
-        ROI_LUT_MIN = 65535;
-
+    public static int[] BrightnessAdjustment(int[] bytes, int brightness) {
         for (int i = 0; i < bytes.length; i++) {
-            if (ROI_LUT_MAX < bytes[i]) {
-                ROI_LUT_MAX = bytes[i];
-            }
-            if (ROI_LUT_MIN > bytes[i]) {
-                ROI_LUT_MIN = bytes[i];
-            }
+            int newColor = bytes[i] + brightness;
+            bytes[i] = Color.argb(255, newColor, newColor, newColor);
         }
-    }
-
-    public void setLUTMax(int max) {
-        ROI_LUT_MAX = max;
-    }
-
-    public void setLUTMin(int min) {
-        ROI_LUT_MIN = min;
     }
 }

@@ -30,7 +30,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_viewer);
 
-        final ViewGroup rootView = (ViewGroup) findViewById(android.R.id.content);
+        final ViewGroup rootView = findViewById(android.R.id.content);
         final BottomNavigationView bottomNavigationView = findViewById(R.id.image_bottom_navigiation_bar);
         mImageView = findViewById(R.id.imageView);
 
@@ -63,6 +63,7 @@ public class ImageViewerActivity extends AppCompatActivity {
                                 rootView.addView(rectangleView);
                             } else {
                                 rootView.removeView(rectangleView);
+                                rectangleView = null;
                             }
                             break;
                         // TODO: allow adjustment of brightness
@@ -71,19 +72,33 @@ public class ImageViewerActivity extends AppCompatActivity {
                             break;
                         // TODO: allow contrast adjustment
                         case R.id.action_contrast:
-
+                            pixels = ImageUtils.BrightnessAdjustment(pixels, 20);
                             break;
                         // adjust image based on selected area
                         case R.id.action_adjust_image:
-                            // TODO: account for when users select the area bottom to top
                             if (rectangleView != null) {
                                 // get the numbers of the selected area pls
                                 Rect r = mImageView.translateSelectionCoordinates(rectangleView.getRectCoords());
                                 int minVal = 65535;
                                 int maxVal = 0;
-
-                                for (int y = r.top; y < r.bottom; y++) {
-                                    for (int x = r.left; x < r.right; x++) {
+                                int top, bottom, left, right;
+                                if (r.top < r.bottom) {
+                                    top = r.top;
+                                    bottom = r.bottom;
+                                } else {
+                                    top = r.bottom;
+                                    bottom = r.top;
+                                }
+                                if (r.left < r.right) {
+                                    left = r.left;
+                                    right = r.right;
+                                } else {
+                                    left = r.right;
+                                    right = r.left;
+                                }
+                                // scan only pixels within ROI
+                                for (int y = top; y < bottom; y++) {
+                                    for (int x = left; x < right; x++) {
                                         int idx = mBitmap.getWidth() * y + x;
                                         if (rawPixelValues[idx] > maxVal) {
                                             maxVal = rawPixelValues[idx];
