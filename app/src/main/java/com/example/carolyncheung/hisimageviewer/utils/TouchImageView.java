@@ -1329,7 +1329,32 @@ public class TouchImageView extends AppCompatImageView {
         mRect.bottom = (int) select.bottom - (int) f[matrix.MTRANS_Y];
         mRect.bottom = (int) (mRect.bottom / f[matrix.MSCALE_Y]);
 
-        Log.d("TOUCH", Integer.toString(mRect.left) + "," + Integer.toString(mRect.top));
+        int origW = (int) getDrawable().getIntrinsicWidth();
+        int origH = (int) getDrawable().getIntrinsicHeight();
+
+        if (mRect.bottom > origH) {
+            mRect.bottom = origH;
+        } else if (mRect.bottom < 0) {
+            mRect.bottom = 0;
+        }
+
+        if (mRect.top > origH) {
+            mRect.top = origH;
+        } else if (mRect.top < 0) {
+            mRect.top = 0;
+        }
+
+        if (mRect.left > origW) {
+            mRect.left = origW;
+        } else if (mRect.left < 0) {
+            mRect.left = 0;
+        }
+
+        if (mRect.right > origW) {
+            mRect.right = origW;
+        } else if (mRect.right < 0) {
+            mRect.right = 0;
+        }
 
         return mRect;
     }

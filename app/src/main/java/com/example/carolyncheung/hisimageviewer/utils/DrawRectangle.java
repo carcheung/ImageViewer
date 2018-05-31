@@ -18,6 +18,7 @@ import android.view.View;
  * Finds the area/pixels selected and saves the values to help in pixel manipulation
  */
 
+// TODO: Limit the area that the rectangle can draw (?)
 public class DrawRectangle extends View {
     Paint mPaint;
     RectF mRectF = new RectF();

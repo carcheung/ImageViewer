@@ -66,15 +66,18 @@ public class ImageViewerActivity extends AppCompatActivity {
                                 rectangleView = null;
                             }
                             break;
-                        // TODO: allow adjustment of brightness
+                        // TODO: debug brightness, add slider
                         case R.id.action_brightness:
-
+                            pixels = ImageUtils.AdjustBrightness(pixels, 20);
+                            renderImage();
                             break;
-                        // TODO: allow contrast adjustment
+                        // TODO: debug contrast, add slider
                         case R.id.action_contrast:
-                            pixels = ImageUtils.BrightnessAdjustment(pixels, 20);
+                            pixels = ImageUtils.AdjustContrast(pixels, 5);
+                            renderImage();
                             break;
                         // adjust image based on selected area
+                        // TODO: Debug adjust image, when there is next to no square the adjust becomes white
                         case R.id.action_adjust_image:
                             if (rectangleView != null) {
                                 // get the numbers of the selected area pls
@@ -120,7 +123,17 @@ public class ImageViewerActivity extends AppCompatActivity {
         );
     }
 
-    // renders HIS image from raw pixel values
+    // render HIS image from raw pixel values
+    private void renderImage() {
+        mBitmap = Bitmap.createBitmap(pixels, HISDecoder.getWidth(), HISDecoder.getHeight(),
+                Bitmap.Config.ARGB_8888);
+        mImageView.setImageBitmap(mBitmap);
+        mImageView.setScaleType(ImageView.ScaleType.FIT_XY);
+        mImageView.setAdjustViewBounds(true);
+        mImageView.setBackgroundColor(Color.parseColor("#000000"));
+    }
+
+    // renders HIS image from raw pixel values, including dark/bright limits
     private void renderImage(int dark, int bright) {
         pixels = ImageUtils.LUTCalculation(pixels, bright, dark);
 

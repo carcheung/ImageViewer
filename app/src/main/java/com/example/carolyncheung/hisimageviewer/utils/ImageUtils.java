@@ -49,10 +49,43 @@ public class ImageUtils {
         return bytes;
     }
 
-    public static int[] BrightnessAdjustment(int[] bytes, int brightness) {
+    // adjust brightness of the image, images are black and white so only need to modify
+    // one channel instead of all
+    public static int[] AdjustBrightness(int[] bytes, int brightness) {
         for (int i = 0; i < bytes.length; i++) {
-            int newColor = bytes[i] + brightness;
-            bytes[i] = Color.argb(255, newColor, newColor, newColor);
+            // grey scale, only need 1 color
+            int r = Color.red(bytes[i]);
+            r += brightness;
+            if (r > 255) {
+                r = 255;
+            } else if (r < 0) {
+                r = 0;
+            }
+
+            bytes[i] = Color.argb(255, r, r, r);
         }
+
+        return bytes;
+    }
+
+    // adjust contrast of the image
+    // Calculation: contrast = (( value + 100 ) / 100) ^ 2
+    public static int[] AdjustContrast(int[] bytes, double val) {
+        // calculate contrast val
+        double contrast = Math.pow((100 + val) / 100, 2);
+        for (int i = 0; i < bytes.length; i++) {
+            int r = Color.red(bytes[i]);
+            // contrast calculation
+            r = (int) (((((r / 255.0) - 0.5) * contrast) + 0.5) * 255.0 );
+            if (r > 255) {
+                r = 255;
+            } else if (r < 0) {
+                r = 0;
+            }
+
+            bytes[i] = Color.argb(255, r, r, r);
+        }
+
+        return bytes;
     }
 }
