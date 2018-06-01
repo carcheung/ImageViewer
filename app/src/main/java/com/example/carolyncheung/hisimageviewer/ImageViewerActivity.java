@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.carolyncheung.hisimageviewer.utils.BottomNavigationViewHelper;
 import com.example.carolyncheung.hisimageviewer.utils.DrawRectangle;
 import com.example.carolyncheung.hisimageviewer.utils.HISDecoder;
 import com.example.carolyncheung.hisimageviewer.utils.ImageUtils;
@@ -47,6 +48,7 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         HISDecoder.HISClose();
 
+        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
